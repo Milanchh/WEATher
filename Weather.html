@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toronto Weather Forecast</title>
+    <style>
+       
+        body, h1, h2 {
+            margin: 0;
+            padding: 0;
+        }
+
+  
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://source.unsplash.com/random/1920x1080/?nature,landscape');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            background: linear-gradient(to right, #9e1515, #835705);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+     
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+      
+        h2::before {
+            content: '☀️';
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Toronto Weather Forecast</h1>
+    <h2 id="currentTemp"></h2>
+    <h2 id="maxTemp"></h2>
+    <h2 id="minTemp"></h2>
+
+    <script>
+        const fetchData = async () => {
+            const url = 'https://open-weather13.p.rapidapi.com/city/Toronto/EN';
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '7105bcffb3msh110e4b799a877c0p150a03jsn54a55793cea5',
+                    'X-RapidAPI-Host': 'open-weather13.p.rapidapi.com'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+
+                // Extract temperature data from the API response
+                const currentTempFahrenheit = data.main.temp;
+                const maxTempFahrenheit = data.main.temp_max;
+                const minTempFahrenheit = data.main.temp_min;
+
+                // Convert temperatures from Fahrenheit to Celsius
+                const currentTempCelsius = (currentTempFahrenheit - 32) * (5/9);
+                const maxTempCelsius = (maxTempFahrenheit - 32) * (5/9);
+                const minTempCelsius = (minTempFahrenheit - 32) * (5/9);
+
+                // Update HTML content with converted temperatures
+                document.getElementById('currentTemp').textContent = `☀️ Current Temperature: ${currentTempCelsius.toFixed(2)}°C`;
+                document.getElementById('maxTemp').textContent = `☀️ Maximum Temperature: ${maxTempCelsius.toFixed(2)}°C`;
+                document.getElementById('minTemp').textContent = `☀️ Minimum Temperature: ${minTempCelsius.toFixed(2)}°C`;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                // Display error message if there's an issue fetching data
+                document.getElementById('currentTemp').textContent = 'Error fetching weather data';
+            }
+        };
+
+        // Call the async function to fetch and display weather data
+        fetchData();
+    </script>
+</body>
+</html>
